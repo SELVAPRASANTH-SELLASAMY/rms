@@ -1,0 +1,119 @@
+.Login_container{
+    display: flex;
+}
+.left_side{
+    min-height: 100vh;
+    width: 50%;
+    min-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+}
+.left_side h1{
+    font-size: 2.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+.left_side p.welcome_message{
+    font-size: 1rem;
+    color: grey;
+    margin-bottom: 1rem;
+}
+.left_side label{
+    font-size: 1rem;
+    color: #000000;
+    margin-bottom: .5rem;
+}
+.left_side input{
+    height: 2.5rem;
+    width: 100%;
+    border-radius: .5rem;
+    padding: 0 1rem;
+    font-size: 1rem;
+    outline: none;
+    border: .1rem solid grey;
+}
+.left_side input[type="checkbox"]{
+    height: 1rem;
+    width: 1rem;
+    cursor: pointer;
+}
+.left_side .password_help{
+    display: flex;
+    margin-bottom: 1.5rem;
+    justify-content: space-between;
+    width: 100%;
+}
+.left_side .showpassword{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.left_side .forgot_password p{
+    cursor: pointer;
+}
+.left_side form{
+    width: 75%;
+    min-width: 550px;
+    /* background-color: green; */
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 3rem;
+    padding-bottom: 2.5rem;
+    border-radius: .5rem;
+}
+Button.signInButton{
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #eb4d4b;
+    padding: .65rem 0;
+    border-radius: .5rem;
+    border: none;
+    cursor: pointer;
+}
+p.createAccount a{
+    font-size: 1rem;
+    text-decoration: none;
+    color: #eb4d4b;
+    cursor: pointer;
+}
+p.createAccount{
+    margin: 1.5rem auto;
+}
+.email_warning,.password_warning,.response_message{
+    font-size: 1rem;
+    color: #eb4d4b;
+    text-align: end;
+    margin-top: .25rem;
+    visibility: hidden;
+}
+.response_message{
+    text-align: center;
+}
+
+/*Right side*/
+.right_side{
+    width: 50vw;
+    min-height: 100vh;
+    /* background-color: #218c74; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* border-radius: 50%; */
+}
+.right_side h2{
+    font-size: 5rem;
+    color: #ffffff;
+    text-shadow: 0 0 0.5rem #000000;
+    letter-spacing: 2.5rem;
+    height: 25rem;
+    width: 25rem;
+    display: grid;
+    place-content: center;
+    padding-left: 2.5rem;
+    background-color: #218c74;
+    border-radius: 50%;
+}
