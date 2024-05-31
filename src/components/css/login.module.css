@@ -21,7 +21,7 @@
     color: grey;
     margin-bottom: 1rem;
 }
-.left_side label{
+/* .left_side label{
     font-size: 1rem;
     color: #000000;
     margin-bottom: .5rem;
@@ -34,7 +34,7 @@
     font-size: 1rem;
     outline: none;
     border: .1rem solid grey;
-}
+} */
 .left_side input[type="checkbox"]{
     height: 1rem;
     width: 1rem;

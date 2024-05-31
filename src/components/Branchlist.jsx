@@ -81,11 +81,12 @@ function Branchlist(){
         }
     ]
     const [isSidebarVisible,setSidebarVisible] = useState(false);
+    const [isAddstreamFieldVisible,setAddStreamFieldVisible] = useState(false);
     return(
         <div className={branchlistStyle.branches_container}>
             <aside style={{left:`${isSidebarVisible ? 0 : '-15rem'}`}}>
                 <ul>
-                    <li><img src={addIcon} alt="add" />Add Stream</li>
+                    <li onClick={()=>setAddStreamFieldVisible(!isAddstreamFieldVisible)}><img src={addIcon} alt="add" />Add Stream</li>
                     <li><img src={sortIcon} alt="sort" />Sort by</li>
                     <li><img src={filterIcon} alt="filter" />Filter</li>
                 </ul>
@@ -101,6 +102,23 @@ function Branchlist(){
                     ))
                 }
             </main>
+            <section style={{top:`${isAddstreamFieldVisible ? '6rem' : '-40rem'}`}} className={branchlistStyle.addStream}>
+                <form>
+                    <h1>Add Stream</h1>
+                    <label htmlFor="stream_name">Stream name</label>
+                    <input id='stream_name' name='stream_name' type="text" placeholder='Enter the stream name'/>
+                    <p className={branchlistStyle.stream_name_warn}>This field couldn't be empty!</p>
+                    <p id='ref_image_display_area_label' className={branchlistStyle.ref_image_display_area_label}>Reference image</p>
+                    <div className={branchlistStyle.ref_image_display_area}>
+                        <span>
+                            <img src={addIcon} alt="add" />
+                            <p>Upload image</p>
+                        </span>
+                    </div>
+                    <p className={branchlistStyle.image_upload_warning}>Couldn't upload image!</p>
+                    <button type='button'>Save</button>
+                </form>
+            </section>
         </div>
     );
 }
