@@ -8,7 +8,12 @@ import EIEImage from '../assets/EIE.jpg';
 import CivilImage from '../assets/Civil.jpg';
 import AutoImage from '../assets/automobile.jpg';
 import branchlistStyle from './css/branchlist.module.css';
+import menuIcon from '../assets/svg/menu.svg';
+import addIcon from '../assets/svg/add.svg';
+import sortIcon from '../assets/svg/sort.svg';
+import filterIcon from '../assets/svg/filter.svg';
 import Stream from './Stream';
+import { useState } from 'react';
 function Branchlist(){
     const streamArray = [
         {
@@ -75,10 +80,19 @@ function Branchlist(){
             RefImage : AutoImage
         }
     ]
+    const [isSidebarVisible,setSidebarVisible] = useState(false);
     return(
         <div className={branchlistStyle.branches_container}>
+            <aside style={{left:`${isSidebarVisible ? 0 : '-15rem'}`}}>
+                <ul>
+                    <li><img src={addIcon} alt="add" />Add Stream</li>
+                    <li><img src={sortIcon} alt="sort" />Sort by</li>
+                    <li><img src={filterIcon} alt="filter" />Filter</li>
+                </ul>
+            </aside>
             <header>
                 <h1>Streams</h1>
+                <img onClick={()=>setSidebarVisible(!isSidebarVisible)} className={branchlistStyle.menuIcon} src={menuIcon} alt="menu" />
             </header>
             <main>
                 {
