@@ -1,0 +1,33 @@
+.branches_container{
+    min-height: 100vh;
+    width: 100%;
+    background-color: #e9f4ff;
+}
+header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+header h1{
+    font-size: 2rem;
+    color: #000000;
+    text-transform: uppercase;
+    margin: 0 auto;
+    text-shadow: .1rem .1rem .25rem grey;
+}
+.branches_container main{
+    height: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 1rem 1rem;
+    padding: 1rem;
+    margin-top: 5rem;
+}

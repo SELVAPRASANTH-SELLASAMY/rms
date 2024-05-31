@@ -1,5 +1,5 @@
 import './App.css';
-import {Login,Depts} from './components';
+import {Login,Branchlist} from './components';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 function App() {
   return (
@@ -7,7 +7,7 @@ function App() {
       <Router>
         <Routes>
           <Route index element={<Login/>}/>
-          <Route path='/streams' element={<Depts/>}/>
+          <Route path='/streams' element={<Branchlist/>}/>
         </Routes>
       </Router>
     </div>

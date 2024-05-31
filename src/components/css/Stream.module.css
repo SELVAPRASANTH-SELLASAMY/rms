@@ -1,0 +1,104 @@
+.stream_container{
+    width: 30rem;
+    aspect-ratio: 2/1;
+    background-color: lightgrey;
+    border-radius: .5rem;
+    overflow: hidden;
+    position: relative;
+    animation: loading-stream-info 2s linear infinite;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+@keyframes loading-stream-info {
+    0%{background-color: rgb(225, 225, 225);}    
+    12.5%{background-color: rgb(215, 215, 215);}
+    25%{background-color: rgb(205, 205, 205);}
+    37.5%{background-color: rgb(195, 195, 195);}
+    50%{background-color: rgb(185, 185, 185)};
+    62.5%{background-color: rgb(195, 195, 195);}
+    75%{background-color: rgb(205, 205, 205);}
+    87.5%{background-color: rgb(215, 215, 215);}
+    100%{background-color: rgb(225, 225, 225);}
+}
+.stream_info{
+    width: 100%;
+    background-color: #00000078;
+    padding: 1rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+h1.stream_name{
+    font-size: 1.5rem;
+    color: #ffffff;
+    text-shadow: .1rem .1rem .1rem black;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    text-transform: uppercase;
+}
+.counts{
+    display: flex;
+    justify-content: space-between;
+}
+.counts p{
+    font-size: 1rem;
+    color: #ffffff;
+    text-shadow: .1rem .1rem .1rem #000000;
+    text-transform: capitalize;
+}
+abbr{
+    text-decoration: none;
+}
+img.more_options_icon{
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 25px;
+    margin: .5rem;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+img.more_options_icon:hover{
+    background-color: #00000078;
+}
+ul.more_options{
+    background-color: #ffffff;
+    border-radius: .25rem;
+    overflow: hidden;
+    position: absolute;
+    right: 1rem;
+    top: 0;
+    margin-top: 2.5rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: 250ms;
+    height: 0;
+    width: 0;
+}
+#display_more_options{
+    height: 5rem;
+    width: 10rem;
+}
+ul.more_options li{
+    font-size: 1rem;
+    font-weight: 500;
+    padding: .5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    text-wrap: nowrap;
+}
+ul.more_options li:hover{
+    background-color: rgb(225, 238, 255);
+}
+ul.more_options li img{
+    height: 1rem;
+    width: 1rem;
+    margin-right: .5rem;
+}
