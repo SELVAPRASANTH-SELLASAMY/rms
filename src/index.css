@@ -21,7 +21,7 @@ label{
   color: #000000;
   margin-bottom: .5rem;
 }
-input{
+input,select,option{
   height: 2.5rem;
   width: 100%;
   border-radius: .5rem;
@@ -29,4 +29,10 @@ input{
   font-size: 1rem;
   outline: none;
   border: .1rem solid grey;
+}
+select{
+  margin-bottom: .5rem;
+}
+option:first-child{
+  color: #646464;
 }
