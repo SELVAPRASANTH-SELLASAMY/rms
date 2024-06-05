@@ -25,12 +25,11 @@ header h1{
 }
 .branches_container main{
     height: fit-content;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    gap: 1rem 1rem;
     padding: 1rem;
     margin-top: 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(25rem,1fr));
+    gap: 1rem;
 }
 img.menuIcon{
     height: 2.5rem;
@@ -91,8 +90,9 @@ aside li:hover{
 section.addStream{
     width: 50rem;
     height: fit-content;
+    max-height: 85vh;
     background-color: #ffffff;
-    overflow: hidden;
+    overflow-y: scroll;
     border-radius: .5rem;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     position: fixed;
@@ -100,6 +100,9 @@ section.addStream{
     top: -40rem;
     transition: 250ms;
     left: calc(50% - 25rem);
+}
+section.addStream::-webkit-scrollbar{
+    width: 0;
 }
 section.addStream form{
     padding: 1.5rem;
@@ -113,7 +116,8 @@ section.addStream h1{
     margin-bottom: 1rem;
 }
 .input_fields{
-    display: contents;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     position: relative;
 }
@@ -155,10 +159,13 @@ button{
     border: .1rem solid grey;
     margin: 0 auto;
     cursor: pointer;
+    background-position: center;
+    background-size: cover;
 }
 .ref_image_display_area span{
     display: flex;
     align-items: center;
+    z-index: -1;
 }
 .ref_image_display_area span p{
     font-size: 1rem;
@@ -169,18 +176,24 @@ button{
     width: 2rem;
     margin: 0 .5rem;
 }
-p.stream_name_warn,p.image_upload_warning,p.degree_name_warn{
+p.stream_name_warn,p.image_upload_warning,p.degree_name_warn,p.response_message{
     font-size: 1rem;
     color: #eb4d4b;
     /* margin-top: .25rem; */
     margin-left: auto;
-    /* visibility: hidden; */
+    visibility: hidden;
     position: absolute;
     right: .5rem;
     bottom: -1.25rem;
 }
 p.image_upload_warning{
     bottom: -1.75rem;
+}
+p.response_message{
+    top: 1rem;
+    width: 100%;
+    text-align: center;
+    /* visibility: visible; */
 }
 .addStream input{
     margin-bottom: .5rem;

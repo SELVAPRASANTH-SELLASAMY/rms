@@ -1,5 +1,5 @@
 .stream_container{
-    width: 30rem;
+    /* width: 30rem; */
     aspect-ratio: 2/1;
     background-color: lightgrey;
     border-radius: .5rem;
@@ -8,9 +8,9 @@
     animation: loading-stream-info 2s linear infinite;
     background-position: center;
     background-size: cover;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex-grow: 1; */
 }
 @keyframes loading-stream-info {
     0%{background-color: rgb(225, 225, 225);}    

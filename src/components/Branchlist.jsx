@@ -1,90 +1,16 @@
-import ITImage from '../assets/Information_technology.jpg';
-import CSEImage from '../assets/computer_science.jpg';
-import MechImage from '../assets/mechanical_engineering.jpg';
-import MechatImage from '../assets/mechatronics_engineering.jpg';
-import EEEImage from '../assets/electrical_and_electronics_engineering.jpg';
-import ECEImage from '../assets/ECE.jpg';
-import EIEImage from '../assets/EIE.jpg';
-import CivilImage from '../assets/Civil.jpg';
-import AutoImage from '../assets/automobile.jpg';
 import branchlistStyle from './css/branchlist.module.css';
 import menuIcon from '../assets/svg/menu.svg';
 import addIcon from '../assets/svg/add.svg';
 import sortIcon from '../assets/svg/sort.svg';
-// import filterIcon from '../assets/svg/filter.svg';
 import name_icon from '../assets/svg/stream_name.svg';
 import student_count_icon from '../assets/svg/student_count.svg';
 import subject_count_icon from '../assets/svg/subject_count.svg';
 import date_icon from '../assets/svg/date.svg';
 import degree_icon from '../assets/svg/degree.svg';
 import Stream from './Stream';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Axios from 'axios';
 function Branchlist(){
-    const streamArray = [
-        {
-            Id : 1,
-            deptName : "Computer Science",
-            subject_count : 8,
-            student_count : 250,
-            RefImage : CSEImage
-        },
-        {
-            Id : 2,
-            deptName : "Information Technology",
-            subject_count : 8,
-            student_count : 250,
-            RefImage : ITImage
-        },
-        {
-            Id : 3,
-            deptName : "Mechanical Engineering",
-            subject_count : 8,
-            student_count : 120,
-            RefImage : MechImage
-        },
-        {
-            Id : 4,
-            deptName : "Mechatronics Engineering",
-            subject_count : 8,
-            student_count : 120,
-            RefImage : MechatImage
-        },
-        {
-            Id : 5,
-            deptName : "Electrical and Electronics Engineering",
-            subject_count : 8,
-            student_count : 245,
-            RefImage : EEEImage
-        },
-        {
-            Id : 6,
-            deptName : "Electronics and Communication Engineering",
-            subject_count : 8,
-            student_count : 240,
-            RefImage : ECEImage
-        },
-        {
-            Id : 7,
-            deptName : "Electronics and Instrumentation Engineering",
-            subject_count : 8,
-            student_count : 205,
-            RefImage : EIEImage
-        },
-        {
-            Id : 8,
-            deptName : "Civil Engineering",
-            subject_count : 8,
-            student_count : 98,
-            RefImage : CivilImage
-        },
-        {
-            Id : 9,
-            deptName : "Automobile Engineering",
-            subject_count : 8,
-            student_count : 79,
-            RefImage : AutoImage
-        }
-    ];
     const degreeNameArray = [
         {
             id : 1,
@@ -155,18 +81,104 @@ function Branchlist(){
             degree_name : 'M.com'
         }
     ];
-    const [isSidebarVisible,setSidebarVisible] = useState(true);
+    const [isSidebarVisible,setSidebarVisible] = useState(false);
     const [isAddstreamFieldVisible,setAddStreamFieldVisible] = useState(false);
-
     const [streamDetails,setStreamDetails] = useState({
-        degree_name : '',
-        stream_name : '',
-        image_location : ''
+        degreename : '',
+        streamname : '',
+        RefImage : ''
     });
 
-    function test(){
-        console.log(streamDetails);
+    const [fetchedStreamDetails,setFetchedStreamDetails] = useState(null);
+
+    const refImageInputField = useRef();
+    const refImageDisplayArea = useRef();
+    const streamForm = useRef();
+    const response_message = useRef();
+    const degree_name_warn = useRef();
+    const stream_name_warn = useRef();
+    const image_upload_warn  = useRef();
+
+    function setRefImage(e){
+        var formData = new FormData();
+        formData.append('reference_image',e.target.files[0]);
+        Axios.post('http://localhost:3001/uploadImages',formData)
+        .then((res)=>{
+            image_upload_warn.current.style.visibility = res.status !== 200 ? 'visible' : 'hidden';
+            if(res.status === 200){
+                setStreamDetails({...streamDetails,RefImage:res.data.path});
+                const reader = new FileReader();
+                reader.onloadend = () =>{
+                    refImageDisplayArea.current.style.backgroundImage = `url(${reader.result})`;
+                }
+                reader.readAsDataURL(e.target.files[0]);
+                console.log(res.data.path);
+            }
+            else{
+                console.log(res);
+            }
+        })
+        .catch((error)=>{
+            image_upload_warn.current.style.visibility = error.status !== 200 ? 'visible' : 'hidden';
+            console.log(error);
+        })
     }
+
+    function validateStreamInfo(){
+        degree_name_warn.current.style.visibility = streamDetails.degreename ? 'hidden' : 'visible';
+        stream_name_warn.current.style.visibility = streamDetails.streamname ? 'hidden' : 'visible';
+        if(streamDetails.degreename && streamDetails.streamname){
+            return true;
+        }
+        return false;
+    }
+
+    function saveStreamInfo(){
+        if(!validateStreamInfo()){
+            return;
+        }
+        Axios.post('http://localhost:3001/storestreams',streamDetails)
+        .then(res => {
+            response_message.current.style.visibility = res.status !== 200 ? 'visible' : 'hidden';
+            if(res.status !== 200){
+                response_message.current.innerHTML = "Something went wrong!";
+                console.log(res);
+            }
+            else{
+                getStreams();
+                streamForm.current.reset();
+                setAddStreamFieldVisible(false);
+            }
+        })
+        .catch(error => {
+            response_message.current.innerHTML = "Something went wrong!";
+            response_message.current.style.visibility = error.status !== 200 ? 'visible' : 'hidden';
+            console.log(error);
+        })
+    }
+    function getStreams(){
+        Axios.get('http://localhost:3001/getstreams')
+        .then((res)=>{
+            if(res.status !== 200){
+                console.log(res.data.message);
+            }
+            else{
+                setFetchedStreamDetails(res.data);
+                console.log(res.data);
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
+    }
+
+    useEffect(()=>{
+        getStreams();
+    },[]);
+    // function test(){
+    //     console.log(streamDetails);
+    // }
+
     return(
         <div className={branchlistStyle.branches_container}>
             <aside style={{left:`${isSidebarVisible ? 0 : '-15rem'}`}}>
@@ -189,17 +201,18 @@ function Branchlist(){
             </header>
             <main>
                 {
-                    streamArray.map((obj)=>(
-                        <Stream key={obj.Id} deptName={obj.deptName} subject_count={obj.subject_count} student_count={obj.student_count} RefImage={obj.RefImage}/>
+                    fetchedStreamDetails && fetchedStreamDetails.map((obj)=>(
+                        <Stream key={obj._id} deptName={obj.streamname} subject_count={obj.subject_count} student_count={obj.student_count} RefImage={obj.RefImage}/>
                     ))
                 }
             </main>
             <section style={{top:`${isAddstreamFieldVisible ? '6rem' : '-40rem'}`}} className={branchlistStyle.addStream}>
-                <form>
+                <form onReset={()=>{refImageDisplayArea.current.style.backgroundImage = null}} ref={streamForm}>
+                    <p ref={response_message} id='response_message' className={branchlistStyle.response_message}>Response</p>
                     <h1>Add Stream</h1>
                     <div className={branchlistStyle.input_fields}>
                         <label htmlFor="degree_name">Degree name</label>
-                        <select onChange={(e)=>setStreamDetails({...streamDetails,degree_name:e.target.value})} name="degree_name" id="degree_name">
+                        <select onChange={(e)=>setStreamDetails({...streamDetails,degreename:e.target.value})} name="degree_name" id="degree_name">
                             <option value="">Select degree</option>
                             {
                                 degreeNameArray.map((obj)=>(
@@ -207,24 +220,25 @@ function Branchlist(){
                                 ))
                             }
                         </select>
-                        <p className={branchlistStyle.degree_name_warn}>This field couldn't be empty!</p>
+                        <p ref={degree_name_warn} className={branchlistStyle.degree_name_warn}>This field couldn't be empty!</p>
                     </div>
                     <div className={branchlistStyle.input_fields}>
                         <label htmlFor="stream_name">Stream name</label>
-                        <input onChange={(e)=>setStreamDetails({...streamDetails,stream_name:e.target.value})} id='stream_name' name='stream_name' type="text" placeholder='Enter the stream name'/>
-                        <p className={branchlistStyle.stream_name_warn}>This field couldn't be empty!</p>
+                        <input onChange={(e)=>setStreamDetails({...streamDetails,streamname:e.target.value})} id='stream_name' name='stream_name' type="text" placeholder='Enter the stream name'/>
+                        <p ref={stream_name_warn} className={branchlistStyle.stream_name_warn}>This field couldn't be empty!</p>
                     </div>
                     <div className={branchlistStyle.input_fields}>
                         <p id='ref_image_display_area_label' className={branchlistStyle.ref_image_display_area_label}>Reference image</p>
-                        <div className={branchlistStyle.ref_image_display_area}>
+                        <div ref={refImageDisplayArea} onClick={()=>refImageInputField.current.click()} className={branchlistStyle.ref_image_display_area}>
+                            <input ref={refImageInputField} onChange={(e)=>setRefImage(e)} style={{display:'none'}} id='setRefImage' type="file" accept='image/*'/>
                             <span>
                                 <img src={addIcon} alt="add" />
                                 <p>Upload image</p>
                             </span>
                         </div>
-                        <p className={branchlistStyle.image_upload_warning}>Couldn't upload image!</p>
+                        <p ref={image_upload_warn} className={branchlistStyle.image_upload_warning}>Couldn't upload image!</p>
                     </div>
-                    <button onClick={()=>test()} type='button'>Save</button>
+                    <button onClick={()=>saveStreamInfo()} type='button'>Save</button>
                 </form>
             </section>
         </div>
