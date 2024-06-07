@@ -92,7 +92,7 @@ section.addStream{
     height: fit-content;
     max-height: 85vh;
     background-color: #ffffff;
-    overflow-y: scroll;
+    overflow-y: auto;
     border-radius: .5rem;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     position: fixed;
@@ -135,13 +135,21 @@ button.file_input_button{
 button{
     font-size: 1rem;
     color: #ffffff;
-    background-color: #eb4d4b;
+    background-color: #2e86de;
     padding: .65rem 0;
     border-radius: .5rem;
     border: none;
     cursor: pointer;
     width: 100%;
     margin-top: 2rem;
+}
+.buttons{
+    display: flex;
+    justify-content: space-between;
+    column-gap: 1rem;
+}
+.buttons button:first-child{
+    background-color: #eb4d4b;
 }
 .ref_image_display_area_label{
     font-size: 1rem;
