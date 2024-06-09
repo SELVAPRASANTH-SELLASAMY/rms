@@ -38,9 +38,6 @@ function Branchlist(){
     useEffect(()=>{
         getStreams();
     },[]);
-    // function test(){
-    //     console.log(streamDetails);
-    // }
 
     return(
         <div className={branchlistStyle.branches_container}>

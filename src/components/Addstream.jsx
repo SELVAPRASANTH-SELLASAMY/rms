@@ -84,17 +84,13 @@ function Addstream({getStreams,setAddStreamFieldVisible,isAddstreamFieldVisible,
     const [streamDetails,setStreamDetails] = useState({
         degreename : '',
         streamname : '',
-        RefImage : ''
+        RefImage : null
     });
     const [beforeUpdate,setBeforeUpdate] = useState({
         degreeName :'',
         streamname : '',
-        RefImage : ''
+        RefImage : null
     });
-
-    useEffect(()=>{
-        onUpdateRequest();
-    },[updateRequestId])
 
     function onUpdateRequest(){
         if(updateRequestId){
@@ -119,40 +115,20 @@ function Addstream({getStreams,setAddStreamFieldVisible,isAddstreamFieldVisible,
             setStreamDetails({
                 degreename : '',
                 streamname : '',
-                RefImage : ''
+                RefImage : null
             })
         }
     }
 
-    function setRefImage(e){
-        var formData = new FormData();
-        formData.append('reference_image',e.target.files[0]);
-        Axios.post('http://localhost:3001/uploadImages',formData)
-        .then((res)=>{
-            image_upload_warn.current.style.visibility = res.status !== 200 ? 'visible' : 'hidden';
-            if(res.status === 200){
-                setStreamDetails({...streamDetails,RefImage:res.data.path});
-                const reader = new FileReader();
-                reader.onloadend = () =>{
-                    refImageDisplayArea.current.style.backgroundImage = `url(${reader.result})`;
-                }
-                reader.readAsDataURL(e.target.files[0]);
-                console.log(res.data.path);
-            }
-            else{
-                console.log(res);
-            }
-        })
-        .catch((error)=>{
-            image_upload_warn.current.style.visibility = error.status !== 200 ? 'visible' : 'hidden';
-            console.log(error);
-        })
-    }
     function saveStreamInfo(){
         if(!validateStreamInfo()){
             return;
         }
-        Axios.post('http://localhost:3001/storestreams',streamDetails)
+        const formData = new FormData();
+        Object.keys(streamDetails).forEach((key)=>{
+            formData.append(key,streamDetails[key]);
+        });
+        Axios.post('http://localhost:3001/storestreams',formData)
         .then(res => {
             response_message.current.style.visibility = res.status !== 200 ? 'visible' : 'hidden';
             if(res.status !== 200){
@@ -161,8 +137,9 @@ function Addstream({getStreams,setAddStreamFieldVisible,isAddstreamFieldVisible,
             }
             else{
                 getStreams();
-                onUpdateRequest()
+                onUpdateRequest();
                 streamForm.current.reset();
+                setStreamDetails({...streamDetails,RefImage:res.data.path});
                 setAddStreamFieldVisible(false);
             }
         })
@@ -192,7 +169,11 @@ function Addstream({getStreams,setAddStreamFieldVisible,isAddstreamFieldVisible,
     function updateStreamInfo(){
         if(JSON.stringify(streamDetails) !== JSON.stringify(beforeUpdate)){
             var newstreamDetails = {...streamDetails,id:updateRequestId};
-            Axios.put('http://localhost:3001/updatestream',newstreamDetails)
+            const formData = new FormData();
+            Object.keys(newstreamDetails).forEach((key)=>{
+                formData.append(key,newstreamDetails[key]);
+            });
+            Axios.put('http://localhost:3001/updatestream',formData)
             .then((res)=>{
                 console.log(res);
                 if(res.status === 200){
@@ -206,6 +187,19 @@ function Addstream({getStreams,setAddStreamFieldVisible,isAddstreamFieldVisible,
             })
         }
     }
+
+    function handleImageInputChange(e){
+        setStreamDetails({...streamDetails,RefImage:e.target.files[0]});
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            refImageDisplayArea.current.style.backgroundImage = `url(${reader.result})`;
+        }
+        reader.readAsDataURL(e.target.files[0]);
+    }
+
+    useEffect(()=>{
+        onUpdateRequest();
+    },[updateRequestId])
 
     return(
         <section style={{top:`${isAddstreamFieldVisible ? '6rem' : '-40rem'}`}} className={branchlistStyle.addStream}>
@@ -232,7 +226,7 @@ function Addstream({getStreams,setAddStreamFieldVisible,isAddstreamFieldVisible,
                 <div className={branchlistStyle.input_fields}>
                     <p id='ref_image_display_area_label' className={branchlistStyle.ref_image_display_area_label}>Reference image</p>
                     <div ref={refImageDisplayArea} style={{backgroundImage:streamDetails.RefImage ? `url(${streamDetails.RefImage})` : ''}} onClick={()=>refImageInputField.current.click()} className={branchlistStyle.ref_image_display_area}>
-                        <input ref={refImageInputField} onChange={(e)=>setRefImage(e)} style={{display:'none'}} id='setRefImage' type="file" accept='image/*'/>
+                        <input ref={refImageInputField} onChange={(e)=>handleImageInputChange(e)} style={{display:'none'}} id='setRefImage' type="file" accept='image/*'/>
                         <span>
                             <img src={addIcon} alt="add" />
                             <p>Upload image</p>
@@ -242,7 +236,7 @@ function Addstream({getStreams,setAddStreamFieldVisible,isAddstreamFieldVisible,
                 </div>
                 <div className={branchlistStyle.buttons}>
                     <button onClick={()=>cancelAddStream()} type='button'>cancel</button>
-                    <button onClick={()=>{!updateRequestId ? saveStreamInfo() : updateStreamInfo();console.log(updateRequestId)}} type='button'>Save</button>
+                    <button onClick={()=>{!updateRequestId ? saveStreamInfo() : updateStreamInfo();}} type='button'>Save</button>
                 </div>
             </form>
         </section>
